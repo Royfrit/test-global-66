@@ -1,6 +1,4 @@
 module.exports = async (req, res) => {
-  console.log(`[GET] /api/rates ${req.url}`)
-
   try {
     const url = require('url')
     const { query } = url.parse(req.url, true)

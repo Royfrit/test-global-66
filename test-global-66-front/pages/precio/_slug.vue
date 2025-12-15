@@ -29,6 +29,8 @@
       :appstore="appstore"
     />
 
+    <SubscribeForm />
+
   </div>
 </template>
 
@@ -39,6 +41,7 @@ import { getCurrencyFromSlug } from '@/utils/currencies'
 import HeaderNav from '@/components/HeaderNav.vue'
 import HeroRate from '@/components/HeroRate.vue'
 import LocalPaySection from '@/components/LocalPaySection.vue'
+import SubscribeForm from '@/components/SubscribeForm.vue'
 
 import logo from '@/assets/images/text-right.svg'
 import flag from '@/assets/images/flag.svg'
@@ -52,7 +55,8 @@ export default {
   components: {
     HeaderNav,
     HeroRate,
-    LocalPaySection
+    LocalPaySection,
+    SubscribeForm
   },
 
   data() {
