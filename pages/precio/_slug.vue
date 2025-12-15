@@ -1,110 +1,33 @@
 <template>
   <div class="min-h-screen">
-    
-    <!-- HEADER + HERO azul -->
-    <section class="bg-primary text-white">
-      <div class="max-w-6xl mx-auto px-6">
 
-        <!-- NAVBAR -->
-        <nav class="flex items-center h-16">
-          <!-- Logo + menú izquierda -->
-          <div class="flex items-center gap-8">
-            <a href="/" class="flex items-center gap-2">
-              <img :src="logo" alt="logo" class="h-6" />
-            </a>
+    <!-- Header -->
+    <HeaderNav :logo="logo" :flagChile="flagChile" />
 
-            <div class="hidden md:flex items-center gap-6 text-sm">
-              <button class="border-b-2 border-green text-green pb-1 font-semibold">
-                Personas
-              </button>
-              <button class="text-white/80 hover:text-white">
-                Empresas
-              </button>
-              <div class="flex items-center gap-6 ml-28">
-                <button class="text-white/80 hover:text-white">
-                  Productos
-                  </button>
-                  <button class="text-white/80 hover:text-white">
-                    Beneficios
-                  </button>
-                  <button class="text-white/80 hover:text-white">
-                    Ayuda
-                  </button>
-                    <img :src="flagChile" class="h-4 w-4 rounded-full size-400" alt="Chile" />
-              </div>
-       
-            </div>
-          </div>
+    <!-- Hero -->
+    <HeroRate :flag="flag">
 
-          <!-- Lado derecho: país + botones -->
-          <div class="flex items-center gap-4 ml-8 text-sm">
-            <button class="hidden md:inline-block text-white/90 hover:text-white">
-              Iniciar sesión
-            </button>
+      <template #title>
+        Valor del dólar hoy
+      </template>
 
-            <button class="bg-white text-primary font-semibold px-4 py-2 rounded-full hover:bg-gray-100">
-              Crear cuenta
-            </button>
-          </div>
-        </nav>
+      <template #rate>
+        1 USD = <span>{{ formattedRate }}</span> {{ currency.code }}
+      </template>
 
-        <!-- HERO -->
-        <div class="pt-10 flex flex-col lg:flex-row items-center justify-between">
+      <template #legend>
+        Tipo de cambio para <strong>{{ formattedDate }}</strong> a las
+        <strong>{{ formattedTime }}</strong> UTC
+      </template>
 
-          <!-- Texto -->
-          <div class="space-y-4">
-            <h1 class="text-3xl lg:text-4xl font-bold">
-              Valor del dólar hoy
-            </h1>
+    </HeroRate>
 
-            <p class="text-4xl font-extrabold">
-              1 USD = <span>{{ formattedRate }}</span> {{ currency.code }}
-            </p>
-
-            <p class="text-white/80 text-sm">
-              Tipo de cambio para <strong>{{ formattedDate }}</strong> a las
-              <strong>{{ formattedTime }}</strong> UTC
-            </p>
-          </div>
-
-          <!-- Gráfico de banderas como en la maqueta -->
-          <div class="relative flex-shrink-0">
-              <img :src="flag" class="w-400 h-400 size-400" alt="USD/CLP" />
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- Sección “Sé Global, paga como local” -->
-    <section class="max-w-6xl mx-auto px-6 py-20">
-      <div class="bg-grey h-96 mt-9 rounded-3xl shadow-xl p-10 flex flex-col lg:flex-row items-center gap-12 relative">
-
-        <!-- Texto -->
-        <div class="space-y-4 max-w-md">
-          <h2 class="text-3xl font-bold">
-            Sé Global,<br><span class="text-primary">paga como local</span>
-          </h2>
-
-          <p class="text-gray-600 text-lg">
-            Tu Cuenta Global para pagar, convertir, enviar dinero y más.
-          </p>
-
-          <div class="flex gap-4 pt-2">
-              <img :src="playstore" alt="Play Store" class="h-6" />
-        
-
-           <img :src="appstore" alt="App Store" class="h-6" />
-          </div>
-        </div>
-
-        <!-- Mockups como en el ejemplo -->
-        <div class="flex items-end gap-6 lg:absolute lg:right-9">
-          <img :src="banner" class="w-400 h-400 size-400" alt="USD/CLP" />
-        </div>
-
-      </div>
-    </section>
+    <!-- Local Pay section -->
+    <LocalPaySection
+      :banner="banner"
+      :playstore="playstore"
+      :appstore="appstore"
+    />
 
   </div>
 </template>
@@ -112,14 +35,26 @@
 <script>
 
 import { getCurrencyFromSlug } from '@/utils/currencies'
+
+import HeaderNav from '@/components/HeaderNav.vue'
+import HeroRate from '@/components/HeroRate.vue'
+import LocalPaySection from '@/components/LocalPaySection.vue'
+
 import logo from '@/assets/images/text-right.svg'
 import flag from '@/assets/images/flag.svg'
 import banner from '@/assets/images/banner.svg'
 import playstore from '@/assets/images/playstore.svg'
 import appstore from '@/assets/images/appstore.svg'
 import flagChile from '@/assets/images/flagChile.svg'
+import { parseISODate, formatCLDate, formatCLTime } from '@/utils/formatters'
 
 export default {
+  components: {
+    HeaderNav,
+    HeroRate,
+    LocalPaySection
+  },
+
   data() {
     return { logo, flag, banner, playstore, appstore, flagChile }
   },
@@ -166,40 +101,22 @@ export default {
     },
 
     dateObj() {
-      if (!this.asOf) return null
-      const clean = this.asOf.replace(/\u200B/g, '')
-      const iso = /Z$|([+-]\d{2}:?\d{2})$/.test(clean) ? clean : `${clean}Z`
-      const d = new Date(iso)
-      return isNaN(d.getTime()) ? null : d
+      return parseISODate(this.asOf)
     },
 
     formattedDate() {
-      if (!this.dateObj) return ''
-      return new Intl.DateTimeFormat('es-CL', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'UTC'
-      }).format(this.dateObj)
+      return formatCLDate(this.dateObj)
     },
 
     formattedTime() {
-      if (!this.dateObj) return ''
-      return new Intl.DateTimeFormat('es-CL', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-        timeZone: 'UTC'
-      }).format(this.dateObj)
+      return formatCLTime(this.dateObj)
     },
 
     canonicalUrl() {
       return `https://tudominio.com/precio/${this.slug}`
     }
   },
-
   head() {
-    console.log(this.currency)
     const title = `Valor del dólar hoy en ${this.currency.country} (${this.currency.code})`
     const description = `Consulta el tipo de cambio actualizado del dólar (USD → ${this.currency.code}) para hoy. Última actualización ${this.formattedDate}.`
 
@@ -207,7 +124,11 @@ export default {
       htmlAttrs: { lang: 'es-CL' },
       title,
       meta: [
-        { hid: 'description', name: 'description', content: description }
+        { hid: 'description', name: 'description', content: description },
+        { hid: 'og:title', property: 'og:title', content: title },
+        { hid: 'og:description', property: 'og:description', content: description },
+        { hid: 'og:type', property: 'og:type', content: 'website' },
+        { hid: 'og:locale', property: 'og:locale', content: 'es_CL' }
       ],
       link: [
         { rel: 'canonical', href: this.canonicalUrl },
@@ -216,12 +137,24 @@ export default {
           hreflang: 'es-CL',
           href: this.canonicalUrl
         }
+      ],
+      script: [
+        {
+          type: 'application/ld+json',
+          json: {
+            "@context": "https://schema.org",
+            "@type": "FinancialProduct",
+            "name": `Valor del dólar hoy en ${this.currency.country}`,
+            "description": description,
+            "currency": this.currency.code,
+            "exchangeRate": this.formattedRate,
+            "datePublished": this.asOf,
+            "url": this.canonicalUrl
+          }
+        }
       ]
     }
   }
 }
 </script>
 
-<style>
-
-</style>
