@@ -1,0 +1,20 @@
+{
+  "dependencies": {
+    "create-nuxt-app": "^6.0.0",
+    "nuxt": "^2.18.1"
+  },
+  "name": "joseph",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@nuxtjs/axios": "^5.13.6",
+    "@nuxtjs/tailwindcss": "^4.1.3"
+  }
+}
