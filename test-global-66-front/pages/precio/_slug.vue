@@ -1,10 +1,8 @@
 <template>
   <div class="min-h-screen">
 
-    <!-- Header -->
     <HeaderNav :logo="logo" :flagChile="flagChile" />
 
-    <!-- Hero -->
     <HeroRate :flag="flag">
 
       <template #title>
@@ -22,7 +20,6 @@
 
     </HeroRate>
 
-    <!-- Local Pay section -->
     <LocalPaySection
       :banner="banner"
       :playstore="playstore"

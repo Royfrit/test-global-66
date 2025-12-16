@@ -2,7 +2,6 @@
   <section class="max-w-6xl mx-auto px-6 py-20">
     <div class="bg-white shadow-lg rounded-3xl p-10 text-center space-y-6">
 
-      <!-- Título -->
       <h2 class="text-3xl font-bold text-gray-900">
         ¿Quieres recibir novedades y actualizaciones?
       </h2>
@@ -12,7 +11,6 @@
         promociones o cambios importantes en el mercado.
       </p>
 
-      <!-- Formulario -->
       <form @submit.prevent="submitForm" class="space-y-4 max-w-sm mx-auto">
 
         <input
@@ -40,7 +38,6 @@
 
       </form>
 
-      <!-- Estados -->
       <p v-if="success" class="text-green-600 text-sm font-medium">
         ¡Gracias! Te avisaremos pronto.
       </p>

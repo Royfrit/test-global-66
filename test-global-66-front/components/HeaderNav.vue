@@ -2,7 +2,6 @@
   <nav class="bg-primary text-white">
     <div class="max-w-6xl mx-auto px-6 flex items-center justify-between h-16">
 
-      <!-- Left -->
       <div class="flex items-center gap-8">
         <a href="/" class="flex items-center gap-2">
           <img :src="logo" alt="logo" class="h-6" />
@@ -24,7 +23,6 @@
         </div>
       </div>
 
-      <!-- Right -->
       <div class="flex items-center gap-4 text-sm">
         <button class="hidden md:inline-block text-white/90 hover:text-white">
           Iniciar sesión

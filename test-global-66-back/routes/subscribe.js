@@ -21,13 +21,15 @@ router.post('/', async (req, res) => {
     const sheets = google.sheets({ version: 'v4', auth: client })
 
     await sheets.spreadsheets.values.append({
-      spreadsheetId: 'TU_SHEET_ID',
-      range: 'Sheet1!A:C',
+      spreadsheetId: '16qJlO0Lk971st_DHY-ySWd72-mryGNBHIShW1AN5ans',
+      range: 'A1:C1', 
       valueInputOption: 'RAW',
       requestBody: {
         values: [[name, email, new Date().toISOString()]]
       }
     })
+
+
 
     return res.json({ success: true })
 
